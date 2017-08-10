@@ -57,7 +57,7 @@ if [[ $? != 0 ]]; then
 	echo "looks like docker is not installed, please install docker and start it before running the script"
 fi
 # pull and run the registry container
-docker run -d -p 5000:5000 --name registry registry:2
+docker run -d -p $port:$port --name $name registry:latest
 if [[ $? !=0 ]]; then
 	echo "failed to pull and run the registry container"
 	exit 1
