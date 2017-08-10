@@ -56,18 +56,17 @@ docker -v
 if [[ $? != 0 ]]; then
 	echo "looks like docker is not installed, please install docker and start it before running the script"
 fi
-
 # pull and run the registry container
 docker run -d -p 5000:5000 --name registry registry:2
 if [[ $? !=0 ]]; then
 	echo "failed to pull and run the registry container"
 	exit 1
 fi
-
 if [[ ! $(docker inspect -f '{{.State.Running}}' $name) ]]; then
 	echo "registry is not running, displaying logs"
 	docker logs registry
 fi
-
+# set insecure-registry flag on the daemon
+echo "{ "insecure-registries":["$host:$port"] }" >> /etc/docker/daemon.json
+systemctl restart docker
 echo -e "registry is running, you can push your images to $host:$port"
-
